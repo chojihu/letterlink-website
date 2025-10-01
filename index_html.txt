@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LetterLink - 세상을 잇는 편지</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', sans-serif; color: #1e293b; }
+nav { position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.95); padding: 1rem 5%; box-shadow: 0 2px 20px rgba(0,0,0,0.1); z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 1.8em; font-weight: 800; background: linear-gradient(135deg, #2563eb, #0ea5e9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links button { background: none; border: none; color: #1e293b; font-size: 1em; font-weight: 500; cursor: pointer; }
+.btn-apply { background: linear-gradient(135deg, #2563eb, #0ea5e9); color: white; padding: 0.7rem 1.5rem; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; }
+.page { display: none; min-height: 100vh; padding-top: 80px; }
+.page.active { display: block; }
+.hero { min-height: 100vh; background: linear-gradient(135deg, #2563eb, #0ea5e9); display: flex; align-items: center; justify-content: center; }
+.hero-content { text-align: center; color: white; padding: 2rem; }
+.hero h1 { font-size: 4em; margin-bottom: 1rem; }
+.hero p { font-size: 1.5em; margin-bottom: 2rem; }
+.cta-btn { padding: 1rem 3rem; border-radius: 50px; font-size: 1.1em; font-weight: 600; cursor: pointer; border: none; margin: 0.5rem; }
+.cta-primary { background: white; color: #2563eb; }
+.cta-secondary { background: transparent; color: white; border: 2px solid white; }
+.timer-box { margin-top: 3rem; background: rgba(255,255,255,0.15); padding: 2rem; border-radius: 20px; }
+.timer { display: flex; gap: 2rem; justify-content: center; font-size: 2em; font-weight: 700; }
+.timer-unit span { display: block; font-size: 0.4em; opacity: 0.8; }
+section
