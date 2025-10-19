@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LetterLink - 국제 펜팔 매칭 서비스</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
+            color: #2d2d2d;
+            line-height: 1.6;
+            background: #0a0a1f;
+            overflow-x: hidden;
+        }
+        
+        /* 네비게이션 */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 31, 0.98);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 2px 30px rgba(255, 255, 255, 0.05);
+            z-index: 1000;
+            padding: 1.2rem 5%;
+            transition: all 0.3s ease;
+        }
+        
+        nav.scrolled {
+            padding: 0.8rem 5%;
+            box-shadow: 0 4px 40px rgba(255, 107, 157, 0.2);
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        nav .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06aff 50%, #6b9dff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            cursor: pointer;
+        }
+        
+        nav .menu {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #e0e0ff;
+            transition: all 0.3s;
+            position: relative;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ff6b9d, #c06aff);
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        nav a:hover {
+            color: #ff6b9d;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06aff 100%);
+            color: white !important;
+            padding: 0.7rem 2rem;
+            border-radius: 30px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+        }
+        
+        .cta-button::after {
+            display: none;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.5);
+        }
+        
+        /* 히어로 섹션 */
+        .hero {
+            background: linear-gradient(180deg, #0a0a1f 0%, #1a1a3e 50%, #0a0a1f 100%);
+            color: white;
+            padding: 10rem 5% 8rem;
+            text-align: center;
+            margin-top: 70px;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        /* 반짝이는 별 배경 */
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+        
+        /* 지구 컨테이너 */
+        .earth-container {
+            position: relative;
+            width: 400px;
+            height: 500px;
+            margin: 0 auto 3rem;
+            z-index: 1;
+        }
+        
+        .earth {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 50%, #2d5f8d 100%);
+            border-radius: 50%;
+            box-shadow: 
+                inset -40px -40px 80px rgba(0, 0, 0, 0.3),
+                0 0 80px rgba(74, 144, 226, 0.4),
+                0 0 150px rgba(74, 144, 226, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: rotate 40s linear infinite;
+        }
+        
+        .earth::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 30% 40%, rgba(46, 125, 50, 0.5) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 60%, rgba(46, 125, 50, 0.4) 0%, transparent 40%),
+                radial-gradient(ellipse at 50% 30%, rgba(139, 195, 74, 0.3) 0%, transparent 35%);
+        }
+        
+        .earth::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+            animation: shine 8s ease-in-out infinite;
+        }
+        
+        @keyframes shine {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 지구 위 사람들 */
+        .people-on-earth {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+            z-index: 2;
+        }
+        
+        .person {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: gentle-float 3s ease-in-out infinite;
+        }
+        
+        .person:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .person:nth-child(2) {
+            animation-delay: 1s;
+        }
+        
+        .person:nth-child(3) {
+            animation-delay: 2s;
+        }
+        
+        @keyframes gentle-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        .person-head {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            margin-bottom: 5px;
+            border: 3px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .person:nth-child(1) .person-head {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+        }
+        
+        .person:nth-child(2) .person-head {
+            background: linear-gradient(135deg, #FFF5E1 0%, #FFEBCD 100%);
+        }
+        
+        .person:nth-child(3) .person-head {
+            background: linear-gradient(135deg, #FFE4C4 0%, #FFDAB9 100%);
+        }
+        
+        .person-body {
+            width: 32px;
+            height: 50px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 255, 0.9) 100%);
+            border-radius: 16px 16px 8px 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, #fff 0%, #ff6b9d 30%, #c06aff 60%, #6b9dff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.2;
+        }
+        
+        .hero .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            color: #e0e0ff;
+            position: relative;
+            z-index: 1;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .btn-primary, .btn-secondary {
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06aff 100%);
+            color: white;
+            box-shadow: 0 10px 40px rgba(255, 107, 157, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 50px rgba(255, 107, 157, 0.6);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #ff6b9d;
+            transform: translateY(-5px);
+        }
+        
+        .countdown {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            padding: 2.5rem 3rem;
+            border-radius: 25px;
+            max-width: 500px;
+            margin: 0 auto;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        .countdown h3 {
+            margin-bottom: 1.5rem;
+            color: #e0e0ff;
+            font-weight: 400;
+            font-size: 1.1rem;
+        }
+        
+        .timer {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+        }
+        
+        .time-unit {
+            text-align: center;
+        }
+        
+        .time-value {
+            font-size: 3rem;
+            font-weight: 800;
+            display: block;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06aff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .time-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            color: #e0e0ff;
+            margin-top: 0.3rem;
+        }
+        
+        /* 섹션 공통 */
+        section {
+            padding: 8rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        section h2 {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 5rem;
+            color: white;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+        
+        #service h2,
+        #price h2 {
+            color: #2a4a7e;
+        }
+        
+        #signup h2 {
+            color: white;
+        }
+        
+        section h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b9d, #c06aff);
+            margin: 1.5rem auto 0;
+            border-radius: 2px;
+        }
+        
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+        }
+        
+        /* 골든서클 섹션 */
+        #golden-circle {
+            background: linear-gradient(180deg, #0a0a1f 0%, #1a2a4e 30%, #2a4a7e 70%, #5a8ab8 100%);
+        }
+        
+        .golden-item {
+            margin-bottom: 6rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .golden-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .golden-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .golden-icon {
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06aff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+        
+        .golden-title {
+            flex: 1;
+        }
+        
+        .golden-title h3 {
+            font-size: 2.5rem;
+            color: #ff6b9d;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+        
+        .golden-title p {
+            font-size: 1.3rem;
+            color: #c06aff;
+            font-weight: 300;
+        }
+        
+        .golden-content {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            padding: 4rem;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .golden-content p {
+            color: #e0e0ff;
+            font-size: 1.15rem;
+            line-height: 2;
+            margin-bottom: 1.5rem;
+        }
+        
+        .golden-content strong {
+            color: #ff6b9d;
+            font-weight: 700;
+        }
+        
+        .golden-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 2rem;
+        }
+        
+        .golden-list li {
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            background: rgba(255, 107, 157, 0.05);
+            border-left: 4px solid #ff6b9d;
+            border-radius: 10px;
+            color: #e0e0ff;
+            line-height: 1.8;
+            transition: all 0.3s;
+        }
+        
+        .golden-list li:hover {
+            background: rgba(255, 107, 157, 0.1);
+            transform: translateX(10px);
+        }
+        
+        .golden-list strong {
+            display: block;
+            font-size: 1.2rem;
+            color: #ff6b9d;
+            margin-bottom: 0.5rem;
+        }
+        
+        .story-box {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.15), rgba(192, 106, 255, 0.15));
+            padding: 3rem;
+            border-radius: 25px;
+            margin: 3rem 0;
+            border: 2px solid rgba(255, 107, 157, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .story-box::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 8rem;
+            color: rgba(255, 107, 157, 0.2);
+            font-family: Georgia, serif;
+        }
+        
+        .story-box p {
+            font-size: 1.3rem;
+            line-height: 2;
+            color: #fff;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .insight-box {
+            background: linear-gradient(135deg, rgba(192, 106, 255, 0.2), rgba(107, 157, 255, 0.2));
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin: 3rem 0;
+            border: 2px solid rgba(192, 106, 255, 0.4);
+            text-align: center;
+        }
+        
+        .insight-box p {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        .feature-item {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+            border-color: #ff6b9d;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.3);
+        }
+        
+        .feature-item div:first-child {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-item p {
+            font-size: 1rem;
+            color: #e0e0ff;
+            margin: 0;
+        }
+        
+        /* 서비스 소개 */
+        #service {
+            background: linear-gradient(180deg, #5a8ab8 0%, #7ab8d8 50%, #a8d8f0 100%);
+        }
+        
+        .service-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 25px;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(192, 106, 255, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        
+        .service-card:hover::before {
+            opacity: 1;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(90, 138, 184, 0.4);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .service-icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .service-card h3 {
+            margin-bottom: 1.5rem;
+            color: #2a4a7e;
+            font-size: 1.8rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .service-card p {
+            color: #1a3a5e;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 가격 */
+        #price {
+            background: linear-gradient(180deg, #a8d8f0 0%, #c8e8ff 30%, #90c590 70%, #70a870 100%);
+        }
+        
+        .price-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+        }
+        
+        .price-option {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px);
+            padding: 3rem 2rem;
+            border-radius: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.4s;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .price-option:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 107, 157, 0.8);
+            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.3);
+        }
+        
+        .price-option.selected {
+            border-color: #ff6b9d;
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.4);
+        }
+        
+        .price-option h3 {
+            font-size: 1.5rem;
+            color: #2a4a7e;
+            margin-bottom: 1rem;
+        }
+        
+        .price-option .price-amount {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06aff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 1rem 0;
+        }
+        
+        .price-option .price-period {
+            color: #2a4a7e;
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .price-option .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06aff 100%);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+        
+        .price-details {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(30px);
+            padding: 3rem;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            margin-top: 3rem;
+            display: none;
+        }
+        
+        .price-details.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .price-details h3 {
+            font-size: 2rem;
+            color: #2a4a7e;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .price-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 2rem;
+        }
+        
+        .price-features li {
+            padding: 1rem 0;
+            color: #2a4a7e;
+            font-size: 1.1rem;
+            border-bottom: 1px solid rgba(42, 74, 126, 0.2);
+        }
+        
+        .price-features li:before {
+            content: "✓ ";
+            color: #ff6b9d;
+            font-weight: bold;
+            margin-right: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .price-cta {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        /* 신청 */
+        #signup {
+            text-align: center;
+            background: linear-gradient(180deg, #70a870 0%, #50a050 20%, #3a9a7a 50%, #2a7a9a 100%);
+            padding: 8rem 5% 10rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #signup::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 300px;
+            background: 
+                radial-gradient(ellipse at 20% 100%, #50a050 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 100%, #60b060 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, #50a050 0%, transparent 50%);
+            z-index: 0;
+        }
+        
+        #signup::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(180deg, transparent 0%, #2a7a9a 50%, #1a5a7a 100%);
+            z-index: 0;
+        }
+        
+        #signup h2,
+        .signup-form {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .signup-form {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: #e0e0ff;
+            font-size: 1.1rem;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #ff6b9d;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.2);
+        }
+        
+        input::placeholder, textarea::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        /* 관심사 체크박스 그리드 */
+        .interests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .interest-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .interest-item input[type="checkbox"] {
+            width: auto;
+            margin-right: 0.5rem;
+            cursor: pointer;
+        }
+        
+        .interest-item label {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 400;
+            cursor: pointer;
+        }
+        
+        .submit-button {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06aff 100%);
+            color: white;
+            padding: 1.5rem 4rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 2rem;
+            box-shadow: 0 10px 40px rgba(255, 107, 157, 0.4);
+            letter-spacing: 1px;
+        }
+        
+        .submit-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.6);
+        }
+        
+        /* 푸터 */
+        footer {
+            background: linear-gradient(180deg, #1a5a7a 0%, #0a3a4a 100%);
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            padding: 3rem;
+            font-size: 0.95rem;
+        }
+        
+        footer p {
+            margin: 0.5rem 0;
+        }
+        
+        /* 신청 완료 모달 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #fff 0%, #f8f8ff 100%);
+            padding: 3rem;
+            border-radius: 30px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.4s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-content h3 {
+            font-size: 2rem;
+            color: #ff6b9d;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-content p {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+        
+        .modal-close {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06aff 100%);
+            color: white;
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .modal-close:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+        }
+        
+        /* 스크롤 애니메이션 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 반응형 */
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 3rem; }
+            .earth-container { width: 300px; height: 400px; }
+            .earth { width: 300px; height: 300px; }
+            section h2 { font-size: 2.5rem; }
+            .service-grid { grid-template-columns: 1fr; }
+        }
+        
+        @media (max-width: 768px) {
+            nav .menu { gap: 1.5rem; font-size: 0.9rem; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero .subtitle { font-size: 1.2rem; }
+            .hero-buttons { flex-direction: column; }
+            .earth-container { width: 250px; height: 350px; }
+            .earth { width: 250px; height: 250px; }
+            .person-head { width: 28px; height: 28px; }
+            .person-body { width: 26px; height: 42px; }
+            .people-on-earth { gap: 10px; }
+            .timer { gap: 1rem; }
+            section { padding: 5rem 5%; }
+            section h2 { font-size: 2rem; margin-bottom: 3rem; }
+            .golden-header { flex-direction: column; gap: 1rem; }
+            .golden-icon { font-size: 3rem; }
+            .golden-title h3 { font-size: 2rem; }
+            .golden-content { padding: 2rem; }
+            .story-box { padding: 2rem; }
+            .story-box p { font-size: 1.1rem; }
+            .insight-box p { font-size: 1.4rem; }
+            .price-options { grid-template-columns: 1fr; }
+            .price-option .price-amount { font-size: 2.5rem; }
+            .interests-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 네비게이션 -->
+    <nav id="navbar">
+        <ul>
+            <li class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">LetterLink</li>
+            <div class="menu">
+                <li><a href="#golden-circle">골든서클</a></li>
+                <li><a href="#service">서비스 소개</a></li>
+                <li><a href="#price">가격</a></li>
+                <li><a href="#signup" class="cta-button">신청하기</a></li>
+            </div>
+        </ul>
+    </nav>
+
+    <!-- 히어로 섹션 -->
+    <section class="hero" id="hero">
+        <!-- 반짝이는 별들 -->
+        <div class="stars" id="stars"></div>
+        
+        <div class="earth-container">
+            <div class="earth"></div>
+            <div class="people-on-earth">
+                <div class="person">
+                    <div class="person-head"></div>
+                    <div class="person-body"></div>
+                </div>
+                <div class="person">
+                    <div class="person-head"></div>
+                    <div class="person-body"></div>
+                </div>
+                <div class="person">
+                    <div class="person-head"></div>
+                    <div class="person-body"></div>
+                </div>
+            </div>
+        </div>
+        
+        <h1>세상을 잇는 편지</h1>
+        <p class="subtitle">1:1 펜팔 교류 매칭 플랫폼</p>
+        
+        <div class="hero-buttons">
+            <a href="#signup" class="btn-primary">지금 신청하기</a>
+            <a href="#golden-circle" class="btn-secondary">서비스 알아보기</a>
+        </div>
+        
+        <div class="countdown">
+            <h3>우리의 편지 여행이 시작된 지</h3>
+            <div class="timer">
+                <div class="time-unit">
+                    <span class="time-value" id="days">291</span>
+                    <span class="time-label">일</span>
+                </div>
+                <div class="time-unit">
+                    <span class="time-value" id="hours">13</span>
+                    <span class="time-label">시간</span>
+                </div>
+                <div class="time-unit">
+                    <span class="time-value" id="minutes">58</span>
+                    <span class="time-label">분</span>
+                </div>
+                <div class="time-unit">
+                    <span class="time-value" id="seconds">44</span>
+                    <span class="time-label">초</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 골든서클 섹션 -->
+    <section id="golden-circle">
+        <h2>Why - How - What</h2>
+        
+        <!-- WHY -->
+        <div class="golden-item fade-in">
+            <div class="golden-header">
+                <div class="golden-icon">WHY</div>
+                <div class="golden-title">
+                    <h3>왜 LetterLink인가?</h3>
+                    <p>모든 것이 데이터로 기록되는 시대 속에서</p>
+                </div>
+            </div>
+            <div class="golden-content">
+                <p>모든 것이 데이터로 기록되는 시대, <strong>사람과 사람 사이의 경계는 점점 높아지고 있습니다.</strong></p>
+                
+                <div class="story-box">
+                    <p>온라인 펜팔을 통해 1년 동안 메시지를 주고받던 외국 친구가 있었습니다. 하지만 여행을 통해 직접 만나 그 친구에게 받은 손편지 한 장이, 느리지만 더 깊게 마음을 움직였습니다.</p>
+                </div>
+                
+                <p>직접 쓴 글씨, 영어와 한국어로 적힌 문장, 그리고 함께했던 추억의 온기. 그 편지 한 장은 1년의 모든 대화보다 더 특별했습니다.</p>
+                
+                <div class="insight-box">
+                    <p>감정은 데이터로 남지 않는다.</p>
+                </div>
+                
+                <p><strong>레터링크는 경험을 경영합니다.</strong> 손편지로 진심이 닿는 연결을 만듭니다.</p>
+            </div>
+        </div>
+
+        <!-- HOW -->
+        <div class="golden-item fade-in">
+            <div class="golden-header">
+                <div class="golden-icon">HOW</div>
+                <div class="golden-title">
+                    <h3>우리는 이렇게 연결합니다</h3>
+                    <p>손편지의 감성을 지키면서도, 개인정보는 안전하게</p>
+                </div>
+            </div>
+            <div class="golden-content">
+                <ul class="golden-list">
+                    <li>
+                        <strong>주소 비공개 허브 시스템</strong>
+                        개인의 주소를 노출하지 않고, 중간 허브가 편지를 대신 전달합니다. 감성은 그대로, 개인정보는 안전하게.
+                    </li>
+                    <li>
+                        <strong>AI 1:1 매칭</strong>
+                        단순한 랜덤 매칭이 아닌, 관심사·가치관이 맞는 사람을 AI가 찾아줍니다. 대화가 아닌, 공감으로 시작되는 관계를 만듭니다.
+                    </li>
+                    <li>
+                        <strong>월 2회 정기 발송 리듬</strong>
+                        매월 1·3주 월요일, 전 세계에서 동시에 발송되는 편지. 기다림이 일상이 되고, 일상이 추억이 됩니다.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- WHAT -->
+        <div class="golden-item fade-in">
+            <div class="golden-header">
+                <div class="golden-icon">WHAT</div>
+                <div class="golden-title">
+                    <h3>우리가 함께 만드는 세상</h3>
+                    <p>국경을 넘어 감정을 주고받는 플랫폼</p>
+                </div>
+            </div>
+            <div class="golden-content">
+                <div class="insight-box">
+                    <p>국경을 넘어 감정을 주고받는 1:1 손편지 교류 플랫폼</p>
+                </div>
+                
+                <p>LetterLink는 <strong>감정을 주고받는 새로운 언어, 손편지의 부활입니다.</strong></p>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div>🌍</div>
+                        <p>전 세계 22개국<br>허브 네트워크</p>
+                    </div>
+                    <div class="feature-item">
+                        <div>🔒</div>
+                        <p>개인정보 비공개<br>교류 시스템</p>
+                    </div>
+                    <div class="feature-item">
+                        <div>💌</div>
+                        <p>감성을 지키는<br>아날로그 경험</p>
+                    </div>
+                    <div class="feature-item">
+                        <div>🤖</div>
+                        <p>AI 기반<br>진심 매칭</p>
+                    </div>
+                    <div class="feature-item">
+                        <div>💰</div>
+                        <p>합리적인<br>구독형 모델</p>
+                    </div>
+                </div>
+                
+                <div class="story-box" style="margin-top: 3rem;">
+                    <p>기술로 감정을 전송하고, 손편지로 세상을 잇습니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 서비스 소개 -->
+    <section id="service">
+        <h2>서비스 소개</h2>
+        <div class="service-grid">
+            <div class="service-card fade-in">
+                <div class="service-icon">🌍</div>
+                <h3>국경을 넘는 진짜 인연</h3>
+                <p>단순한 언어 교환이 아닌, 서로의 삶과 문화를 나누는 깊은 교류를 경험하세요. AI가 당신과 가장 잘 맞는 펜팔 친구를 찾아드립니다.</p>
+            </div>
+            <div class="service-card fade-in">
+                <div class="service-icon">🔒</div>
+                <h3>주소 비공개 시스템</h3>
+                <p>참가자 서로의 주소를 모른 상태에서도 편지를 교환할 수 있습니다. 허브 시스템을 통해 안전하게 편지를 주고받으며, 당신의 프라이버시를 최우선으로 보호합니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 가격 -->
+    <section id="price">
+        <h2>플랜 선택하기</h2>
+        
+        <div class="price-options">
+            <div class="price-option" data-plan="individual">
+                <h3>개인</h3>
+                <div class="price-amount">7,900원</div>
+                <p class="price-period">월 2회 편지 교환</p>
+                <div class="badge">가장 인기</div>
+            </div>
+            
+            <div class="price-option" data-plan="group">
+                <h3>단체</h3>
+                <div class="price-amount">4,900원</div>
+                <p class="price-period">월 2회 편지 교환</p>
+                <p class="price-period" style="margin-top: -1rem; font-size: 0.9rem; opacity: 0.9;">학급-학급 / 동아리-동아리 매칭</p>
+                <div class="badge">10명 이상</div>
+            </div>
+            
+            <div class="price-option" data-plan="trio">
+                <h3>공동 (3인)</h3>
+                <div class="price-amount">5,900원</div>
+                <p class="price-period">월 2회 편지 교환</p>
+                <div class="badge">친구와 함께</div>
+            </div>
+        </div>
+        
+        <!-- 개인 플랜 상세 -->
+        <div class="price-details" id="detail-individual">
+            <h3>개인 플랜</h3>
+            <ul class="price-features">
+                <li>1:1 맞춤 AI 매칭</li>
+                <li>주소 비공개 시스템</li>
+                <li>월 2회 정기 발송 (1·3주 월요일)</li>
+                <li>배송 추적 서비스</li>
+                <li>커뮤니티 참여</li>
+                <li>언제든지 해지 가능</li>
+            </ul>
+            <div class="price-cta">
+                <a href="#signup" class="cta-button" style="display: inline-block; padding: 1rem 3rem; text-decoration: none;">개인 플랜 신청하기</a>
+            </div>
+        </div>
+        
+        <!-- 단체 플랜 상세 -->
+        <div class="price-details" id="detail-group">
+            <h3>단체 플랜 (10명 이상)</h3>
+            <ul class="price-features">
+                <li>단체 맞춤 매칭 (같은 학교/동아리 우선)</li>
+                <li>주소 비공개 시스템</li>
+                <li>월 2회 정기 발송</li>
+                <li>단체 관리자 대시보드</li>
+                <li>단체 할인 혜택 (1인당 3,000원 절감)</li>
+                <li>교육 기관 특별 프로그램</li>
+            </ul>
+            <div class="price-cta">
+                <a href="#signup" class="cta-button" style="display: inline-block; padding: 1rem 3rem; text-decoration: none;">단체 플랜 문의하기</a>
+            </div>
+        </div>
+        
+        <!-- 공동(3인) 플랜 상세 -->
+        <div class="price-details" id="detail-trio">
+            <h3>공동 플랜 (3인)</h3>
+            <ul class="price-features">
+                <li>친구 3명이 함께 신청</li>
+                <li>주소 비공개 시스템</li>
+                <li>월 2회 정기 발송</li>
+                <li>배송 추적 서비스</li>
+                <li>1인당 2,000원 절감 혜택</li>
+                <li>함께 시작하는 특별한 추억</li>
+            </ul>
+            <div class="price-cta">
+                <a href="#signup" class="cta-button" style="display: inline-block; padding: 1rem 3rem; text-decoration: none;">공동 플랜 신청하기</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 신청 -->
+    <section id="signup">
+        <h2>지금 신청하세요</h2>
+        <form class="signup-form" id="signupForm">
+            <div class="form-group">
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">이메일</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="age">나이</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+            <div class="form-group">
+                <label for="plan">플랜 선택</label>
+                <select id="plan" name="plan" required>
+                    <option value="">플랜을 선택해주세요</option>
+                    <option value="individual">개인 (7,900원)</option>
+                    <option value="group">단체 (4,900원)</option>
+                    <option value="trio">공동 3인 (5,900원)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="language">사용 가능한 언어</label>
+                <input type="text" id="language" name="language" placeholder="예: 한국어, 영어, 일본어" required>
+            </div>
+            <div class="form-group">
+                <label for="preferred-language">상대방이 사용했으면 하는 언어</label>
+                <input type="text" id="preferred-language" name="preferred-language" placeholder="예: 영어, 일본어" required>
+            </div>
+            <div class="form-group">
+                <label>관심사 (중복 선택 가능)</label>
+                <div class="interests-grid">
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest1" name="interests" value="문학">
+                        <label for="interest1">문학</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest2" name="interests" value="음악">
+                        <label for="interest2">음악</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest3" name="interests" value="영화">
+                        <label for="interest3">영화</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest4" name="interests" value="여행">
+                        <label for="interest4">여행</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest5" name="interests" value="예술">
+                        <label for="interest5">예술</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest6" name="interests" value="음식">
+                        <label for="interest6">음식</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest7" name="interests" value="언어">
+                        <label for="interest7">언어</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest8" name="interests" value="자연">
+                        <label for="interest8">자연</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest9" name="interests" value="철학">
+                        <label for="interest9">철학</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest10" name="interests" value="기술">
+                        <label for="interest10">기술</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest11" name="interests" value="패션">
+                        <label for="interest11">패션</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest12" name="interests" value="사진">
+                        <label for="interest12">사진</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest13" name="interests" value="스포츠">
+                        <label for="interest13">스포츠</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest14" name="interests" value="자원봉사">
+                        <label for="interest14">자원봉사</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest15" name="interests" value="동물">
+                        <label for="interest15">동물</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest16" name="interests" value="자기계발">
+                        <label for="interest16">자기계발</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest17" name="interests" value="감정기록">
+                        <label for="interest17">감정기록</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest18" name="interests" value="문화교류">
+                        <label for="interest18">문화교류</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest19" name="interests" value="창작">
+                        <label for="interest19">창작</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest20" name="interests" value="인간관계">
+                        <label for="interest20">인간관계</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest21" name="interests" value="역사">
+                        <label for="interest21">역사</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest22" name="interests" value="과학">
+                        <label for="interest22">과학</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest23" name="interests" value="심리학">
+                        <label for="interest23">심리학</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest24" name="interests" value="명상">
+                        <label for="interest24">명상</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest25" name="interests" value="독서">
+                        <label for="interest25">독서</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest26" name="interests" value="글쓰기">
+                        <label for="interest26">글쓰기</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest27" name="interests" value="그림그리기">
+                        <label for="interest27">그림그리기</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest28" name="interests" value="악기연주">
+                        <label for="interest28">악기연주</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest29" name="interests" value="요리">
+                        <label for="interest29">요리</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest30" name="interests" value="베이킹">
+                        <label for="interest30">베이킹</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest31" name="interests" value="등산">
+                        <label for="interest31">등산</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest32" name="interests" value="자전거">
+                        <label for="interest32">자전거</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest33" name="interests" value="춤">
+                        <label for="interest33">춤</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest34" name="interests" value="게임">
+                        <label for="interest34">게임</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest35" name="interests" value="애니메이션">
+                        <label for="interest35">애니메이션</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest36" name="interests" value="디자인">
+                        <label for="interest36">디자인</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest37" name="interests" value="환경보호">
+                        <label for="interest37">환경보호</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest38" name="interests" value="드라마">
+                        <label for="interest38">드라마</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest39" name="interests" value="뮤지컬">
+                        <label for="interest39">뮤지컬</label>
+                    </div>
+                    <div class="interest-item">
+                        <input type="checkbox" id="interest40" name="interests" value="수공예">
+                        <label for="interest40">수공예</label>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="submit-button">신청하기</button>
+        </form>
+    </section>
+
+    <!-- 푸터 -->
+    <footer>
+        <p>&copy; 2025 LetterLink. All rights reserved.</p>
+        <p>국제 펜팔 매칭 서비스 - LetterLink 공식 웹사이트</p>
+    </footer>
+
+    <!-- 신청 완료 모달 -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <h3>🎉 신청 완료!</h3>
+            <p>LetterLink 신청이 성공적으로 완료되었습니다.<br>곧 이메일로 연락드리겠습니다.</p>
+            <p style="font-size: 0.95rem; color: #666;">선택하신 관심사를 바탕으로<br>최적의 펜팔 친구를 매칭해드릴게요!</p>
+            <button class="modal-close" onclick="closeModal()">확인</button>
+        </div>
+    </div>
+
+    <script>
+        // 반짝이는 별 생성
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            starsContainer.appendChild(star);
+        }
+        
+        // 스크롤 시 네비게이션 효과
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // 스크롤 애니메이션
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.fade-in, .golden-item').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // 가격 플랜 선택
+        const priceOptions = document.querySelectorAll('.price-option');
+        const priceDetails = document.querySelectorAll('.price-details');
+        
+        priceOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const plan = this.getAttribute('data-plan');
+                
+                // 선택 상태 변경
+                priceOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                // 상세 정보 표시
+                priceDetails.forEach(detail => detail.classList.remove('active'));
+                document.getElementById('detail-' + plan).classList.add('active');
+            });
+        });
+        
+        // 기본적으로 개인 플랜 선택
+        document.querySelector('[data-plan="individual"]').click();
+        
+        // 카운트다운 타이머
+        const startDate = new Date('2024-04-15T00:00:00');
+        
+        function updateCountdown() {
+            const now = new Date();
+            const diff = now - startDate;
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
+        }
+        
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+        
+        // 폼 제출
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 선택된 관심사 수집
+            const selectedInterests = [];
+            document.querySelectorAll('input[name="interests"]:checked').forEach(checkbox => {
+                selectedInterests.push(checkbox.value);
+            });
+            
+            if (selectedInterests.length === 0) {
+                alert('최소 1개 이상의 관심사를 선택해주세요!');
+                return;
+            }
+            
+            // 모달 표시
+            document.getElementById('successModal').classList.add('active');
+            
+            // 폼 초기화
+            this.reset();
+        });
+        
+        // 모달 닫기
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
+        }
+        
+        // 모달 배경 클릭시 닫기
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
